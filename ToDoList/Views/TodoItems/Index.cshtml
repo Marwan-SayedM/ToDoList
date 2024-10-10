@@ -1,0 +1,51 @@
+﻿@model List<TodoList.Models.TodoItem>
+
+@{
+    ViewData["Title"] = "Todo List";
+}
+
+<h1>Welcome, @ViewBag.UserName</h1>
+<h2>Here is your to-do list:</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" id="tempMessage">@TempData["Message"]</div>
+
+    <script>
+            setTimeout(function() {
+            var tempMessage = document.getElementById('tempMessage');
+            if (tempMessage) {
+                tempMessage.style.display = 'none';
+            }
+        }, 2000); 
+        @* // 4000 milliseconds = 4 seconds *@
+    </script>
+}
+<p><a asp-action="Create" class="btn btn-primary">Create New</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Deadline.ToString("dd/MM/yyyy hh:mm tt")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-link" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
